@@ -11,15 +11,15 @@ public class Robot extends IterativeRobot
 	@Override
 	public void robotInit() 
 	{
-	enc = new Encoders();
-	stick = new Joysticks();
+		enc = new Encoders();
+		stick = new Joysticks();
 	}
 
 	 //This function runs once, right before autonomous period starts. 
 	@Override
 	public void autonomousInit() 
 	{
-    Encoders.resetEncoders();
+    	Encoders.resetEncoders();
 	}
 
 	//This is the function that is called during the autonomous period
