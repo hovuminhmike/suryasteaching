@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 public class Robot extends IterativeRobot 
 {	
 	Joysticks stick;
-  Encoders enc;
+  	Encoders enc;
 	//This function is run whenever the robot starts. This function is used for any initialization of code
 	@Override
 	public void robotInit() 
