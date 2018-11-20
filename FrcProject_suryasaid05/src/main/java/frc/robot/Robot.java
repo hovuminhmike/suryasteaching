@@ -1,24 +1,25 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Joystick;
+
 
 public class Robot extends IterativeRobot 
 {	
-	double rightJoyStickx, rightJoySticky;
-	Joysticks stick; 
+	Joysticks stick;
+  Encoders enc;
 	//This function is run whenever the robot starts. This function is used for any initialization of code
 	@Override
 	public void robotInit() 
 	{
-		stick = new Joysticks();
+	enc = new Encoders();
+	stick = new Joysticks();
 	}
 
 	 //This function runs once, right before autonomous period starts. 
 	@Override
 	public void autonomousInit() 
 	{
-
+    Encoders.resetEncoders();
 	}
 
 	//This is the function that is called during the autonomous period
@@ -26,14 +27,22 @@ public class Robot extends IterativeRobot
 	@Override
 	public void autonomousPeriodic() 
 	{
+		double lEnc = enc.getLeftEncoder();
+		double rEnc = enc.getRightEncoder();
+		Autonomous.rightAuto(lEnc, rEnc);
+	}
 
+	@Override
+	public void teleopInit() 
+	{
+		
 	}
 
 	//This is the function that is called during the Tele-operated period
 	//This function runs periodically, meaning it acts as an infinite loop
 	@Override
 	public void teleopPeriodic() 
-	{  
+	{
 		stick.updateMainController();
 		double angle = getDegrees();
 		double mag = getMagnitude();
@@ -134,9 +143,7 @@ public class Robot extends IterativeRobot
 	{
 		
 	}
-	
-	//This function returns the angle of the vector of the right Joystick values
-	//You may need to edit this function depending upon what type of controller you are using
+
 	public static double getDegrees()
 	{
 		if(Joysticks.rightJoySticky > 0  && Joysticks.rightJoyStickx > 0) //1st quadrant
@@ -176,19 +183,19 @@ public class Robot extends IterativeRobot
 			return 0;
 		}
 	}
-	
-	//This function returns the magnitude of the vector of the right Joystick
-	public static double getMagnitude()
-	{
-		return Math.sqrt(Math.pow(Joysticks.rightJoySticky, 2) + Math.pow(Joysticks.rightJoyStickx, 2));
-	}
-	
-	public void testFunctions()
-	{
-		double magnitude, angle;
-		magnitude =  getMagnitude();
-		angle = getDegrees();
+
+		//This function returns the magnitude of the vector of the right Joystick
+		public static double getMagnitude()
+		{
+			return Math.sqrt(Math.pow(Joysticks.rightJoySticky, 2) + Math.pow(Joysticks.rightJoyStickx, 2));
+		}
 		
-		System.out.println("Magnitude: " + magnitude + "; " + "Angle: " + angle + ";");
-	}
+		public void testFunctions()
+		{
+			double magnitude, angle;
+			magnitude =  getMagnitude();
+			angle = getDegrees();
+			
+			System.out.println("Magnitude: " + magnitude + "; " + "Angle: " + angle + ";");
+		}
 }
