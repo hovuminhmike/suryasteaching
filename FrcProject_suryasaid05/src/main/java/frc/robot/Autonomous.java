@@ -73,6 +73,10 @@ public class Autonomous
 	String autoSelected = "middleAuto";
 	double encoderDiff = (Math.abs(rEnc - lEnc));
 	double speedDiff = (encoderDiff*0.3/60);
+	double surio = 3/2;
+	double encosurio = rEnc/lEnc;
+	double surd = encosurio/surio;
+	double sureed = 1;
 		switch(surya)
 		{
 			case 0:
@@ -111,24 +115,33 @@ public class Autonomous
 			case 2:
 				if(rEnc < 4000)
 				{
-					if(encoderDiff < 6)
+					if(surd == 1)
 					{
-						Motors.rightMotor.set(-.9);
-						Motors.leftMotor.set(.3);
+						Motors.rightMotor.set(-.7);
+						Motors.leftMotor.set(.7*surio);
 					}
 					else
 					{
-						if(rEnc>lEnc)
+						if(encosurio < 1)
 						{
-							Motors.rightMotor.set(-.9);
-							Motors.leftMotor.set(.3);
+							Motors.rightMotor.set(-.7);
+							Motors.leftMotor.set(.7);
 						}
-						else
+						else 
 						{
-							Motors.rightMotor.set(-.9);
-							Motors.leftMotor.set(.3
-							);
+							Motors.rightMotor.set(-.7);
+							Motors.leftMotor.set(.7);
 						}
+						// if(rEnc>lEnc)
+						// {
+						// 	Motors.rightMotor.set(-.7);
+						// 	Motors.leftMotor.set(.7);
+						// }
+						// else
+						// {
+						// 	Motors.rightMotor.set(-.7);
+						// 	Motors.leftMotor.set(.7);
+						// }
 					}
 				}
 				else
@@ -146,9 +159,13 @@ public class Autonomous
 
 	public static void leftAuto(double lEnc, double rEnc)
 	{
-	String autoSelected = "middleAuto";
-	double encoderDiff = (Math.abs(rEnc - lEnc));
-	double speedDiff = (encoderDiff*0.3/60);
+		String autoSelected = "middleAuto";
+		double encoderDiff = (Math.abs(rEnc - lEnc));
+		double speedDiff = (encoderDiff*0.3/60);
+		double surio = 3/2;
+		double encosurio = rEnc/lEnc;
+		double surd = encosurio/surio;
+		double sureed = 1;
 		switch(surya)
 		{
 			case 0:
@@ -185,37 +202,37 @@ public class Autonomous
 				surya = 2;
 				break;
 			case 2:
-				if(rEnc < 2000)
+			if(rEnc < 4000)
+			{
+				if(surd == 1)
 				{
-					if(encoderDiff < 6)
-					{
-						Motors.rightMotor.set(-.3);
-						Motors.leftMotor.set(.9);
-					}
-					else 
-					{
-						if(rEnc>lEnc)
-						{
-							Motors.rightMotor.set(-.3 + speedDiff);
-							Motors.leftMotor.set(.9 + speedDiff);
-						}
-						else
-						{
-							Motors.rightMotor.set(-.3 - speedDiff);
-							Motors.leftMotor.set(.9 - speedDiff);
-						}
-					}
+					Motors.rightMotor.set(-.7);
+					Motors.leftMotor.set(.7*surio);
 				}
 				else
 				{
-					surya = 3;
+					if(encosurio < 1)
+					{
+						Motors.rightMotor.set(-.7+sureed);
+						Motors.leftMotor.set(.7+sureed);
+					}
+					else 
+					{
+						Motors.rightMotor.set(-.7-sureed);
+						Motors.leftMotor.set(.7-sureed);
+					}
 				}
-				break;
-				case 3:
-				Motors.rightMotor.set(0);
-				Motors.leftMotor.set(0);
-				Encoders.resetEncoders();
-				break;
+			}
+			else
+			{
+ 				surya = 3;
+			}
+			break;
+			case 3:
+			Motors.rightMotor.set(0);
+			Motors.leftMotor.set(0);
+			Encoders.resetEncoders();
+			break;
 		}
 	}
 }
