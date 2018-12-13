@@ -73,14 +73,14 @@ public class Autonomous
 	String autoSelected = "middleAuto";
 	double encoderDiff = (Math.abs(rEnc - lEnc));
 	double speedDiff = (encoderDiff*0.3/60);
-	double surio = 3/2;
+	double surio = 2/1;
 	double encosurio = rEnc/lEnc;
 	double surd = encosurio/surio;
-	double sureed = 1;
+	double sureed = .3;
 		switch(surya)
 		{
 			case 0:
-				if(rEnc < 2000)
+				if(rEnc < 1000)
 				{
 					if(encoderDiff < 6)
 					{
@@ -124,12 +124,12 @@ public class Autonomous
 					{
 						if(encosurio < 1)
 						{
-							Motors.rightMotor.set(-.7);
+							Motors.rightMotor.set(-.7-sureed);
 							Motors.leftMotor.set(.7);
 						}
 						else 
 						{
-							Motors.rightMotor.set(-.7);
+							Motors.rightMotor.set(-.7*surio);
 							Motors.leftMotor.set(.7);
 						}
 						// if(rEnc>lEnc)
@@ -162,14 +162,14 @@ public class Autonomous
 		String autoSelected = "middleAuto";
 		double encoderDiff = (Math.abs(rEnc - lEnc));
 		double speedDiff = (encoderDiff*0.3/60);
-		double surio = 3/2;
+		double surio = 4/1;
 		double encosurio = rEnc/lEnc;
 		double surd = encosurio/surio;
-		double sureed = 1;
+		double sureed = .3;
 		switch(surya)
 		{
 			case 0:
-				if(rEnc < 2000)
+				if(rEnc < 1000)
 				{
 					if(encoderDiff < 6)
 					{
@@ -202,7 +202,7 @@ public class Autonomous
 				surya = 2;
 				break;
 			case 2:
-			if(rEnc < 4000)
+			if(rEnc < 3000)
 			{
 				if(surd == 1)
 				{
@@ -213,13 +213,13 @@ public class Autonomous
 				{
 					if(encosurio < 1)
 					{
-						Motors.rightMotor.set(-.7+sureed);
-						Motors.leftMotor.set(.7+sureed);
+						Motors.rightMotor.set(-.7);
+						Motors.leftMotor.set(.7*surio);
 					}
 					else 
 					{
-						Motors.rightMotor.set(-.7-sureed);
-						Motors.leftMotor.set(.7-sureed);
+						Motors.rightMotor.set(-.7);
+						Motors.leftMotor.set(.7+sureed);
 					}
 				}
 			}

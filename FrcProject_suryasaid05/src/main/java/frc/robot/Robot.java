@@ -29,7 +29,7 @@ public class Robot extends IterativeRobot
 	{
 		double lEnc = enc.getLeftEncoder();
 		double rEnc = enc.getRightEncoder();
-		Autonomous.rightAuto(lEnc, rEnc);
+		Autonomous.leftAuto(lEnc, rEnc);
 	}
 
 	@Override
