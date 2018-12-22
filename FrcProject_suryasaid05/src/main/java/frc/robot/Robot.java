@@ -35,7 +35,8 @@ public class Robot extends IterativeRobot
 	@Override
 	public void teleopInit() 
 	{
-		
+		Motors.leftMotor.set(0);
+		Motors.rightMotor.set(0);
 	}
 
 	//This is the function that is called during the Tele-operated period
@@ -47,6 +48,10 @@ public class Robot extends IterativeRobot
 		double angle = getDegrees();
 		double mag = getMagnitude();
 		System.out.println(angle);
+		double lEnc = enc.getLeftEncoder();
+		double rEnc = enc.getRightEncoder();
+		double encoderDiff = (Math.abs(rEnc - lEnc));
+		double speedDiff = (encoderDiff*0.3/60);
 		
 		if(angle == 0)
 		{

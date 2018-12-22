@@ -76,7 +76,8 @@ public class Autonomous
 	double surio = 2/1;
 	double encosurio = rEnc/lEnc;
 	double surd = encosurio/surio;
-	double sureed = .3;
+	double sureft = Math.abs((0.7/encosurio));
+	double suright = Math.abs((0.7*encosurio));
 		switch(surya)
 		{
 			case 0:
@@ -117,31 +118,29 @@ public class Autonomous
 				{
 					if(surd == 1)
 					{
-						Motors.rightMotor.set(-.7);
-						Motors.leftMotor.set(.7*surio);
+						Motors.rightMotor.set(-.7*surio);
+						Motors.leftMotor.set(.7);
 					}
 					else
 					{
 						if(encosurio < 1)
 						{
-							Motors.rightMotor.set(-.7-sureed);
-							Motors.leftMotor.set(.7);
+							Motors.rightMotor.set(-suright);
+							Motors.leftMotor.set(sureft);
 						}
-						else 
+						else
 						{
-							Motors.rightMotor.set(-.7*surio);
-							Motors.leftMotor.set(.7);
+							// if(surd < 1)
+							// {
+							// 	Motors.rightMotor.set(-.7*surio);
+							// 	Motors.leftMotor.set(.7);
+							// }
+							// else
+							// {
+							// 	Motors.rightMotor.set(-.7*surio);
+							// 	Motors.leftMotor.set(.7);
+							// }
 						}
-						// if(rEnc>lEnc)
-						// {
-						// 	Motors.rightMotor.set(-.7);
-						// 	Motors.leftMotor.set(.7);
-						// }
-						// else
-						// {
-						// 	Motors.rightMotor.set(-.7);
-						// 	Motors.leftMotor.set(.7);
-						// }
 					}
 				}
 				else
@@ -165,7 +164,8 @@ public class Autonomous
 		double surio = 4/1;
 		double encosurio = rEnc/lEnc;
 		double surd = encosurio/surio;
-		double sureed = .3;
+		double sureft = Math.abs((0.7/encosurio));
+		double suright = Math.abs((0.7*encosurio));
 		switch(surya)
 		{
 			case 0:
@@ -218,8 +218,8 @@ public class Autonomous
 					}
 					else 
 					{
-						Motors.rightMotor.set(-.7);
-						Motors.leftMotor.set(.7+sureed);
+						Motors.rightMotor.set(-suright);
+						Motors.leftMotor.set(sureft);
 					}
 				}
 			}
