@@ -1,206 +1,62 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.*;
+import frc.team3647inputs.Joysticks;
+import frc.team3647inputs.Limelight;
+import frc.team3647inputs.NavX;
+import frc.team3647subsystems.Drivetrain;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
-public class Robot extends IterativeRobot 
-{	
+public class Robot extends IterativeRobot
+{
 	Joysticks stick;
-  	Encoders enc;
-	//This function is run whenever the robot starts. This function is used for any initialization of code
+	Limelight one;
+
+
 	@Override
-	public void robotInit() 
+	public void robotInit()
 	{
-		enc = new Encoders();
+		one = new Limelight();
 		stick = new Joysticks();
+		Drivetrain.drivetrainInitialization(false);
 	}
 
-	 //This function runs once, right before autonomous period starts. 
+	int input = 1;
+
 	@Override
-	public void autonomousInit() 
+	public void autonomousInit()
 	{
-    	Encoders.resetEncoders();
+		Drivetrain.FRCarcadedrive(0.5, 0.5);
+		Drivetrain.setToCoast();
+		input = 1;
 	}
 
-	//This is the function that is called during the autonomous period
-	//This function runs periodically, meaning it acts as an infinite loop
+	
 	@Override
-	public void autonomousPeriodic() 
+	public void autonomousPeriodic()
 	{
-		double lEnc = enc.getLeftEncoder();
-		double rEnc = enc.getRightEncoder();
-		Autonomous.leftAuto(lEnc, rEnc);
+		one.updateLimelight();
+		one.follow(.3, 0, 1.1, .1, 0.5, 6);
+		// one.center(.3, 0, 1.1 , .075);
 	}
 
-	@Override
-	public void teleopInit() 
+
+	// This is the function that runs during Tele-Operated Period
+	public void teleopPeriodic()
 	{
-		Motors.leftMotor.set(0);
-		Motors.rightMotor.set(0);
+		stick.setMainContollerValues();
+		Drivetrain.FRCarcadedrive(stick.rightJoyStickx, stick.leftJoySticky);
+
 	}
 
-	//This is the function that is called during the Tele-operated period
-	//This function runs periodically, meaning it acts as an infinite loop
 	@Override
-	public void teleopPeriodic() 
-	{
-		stick.updateMainController();
-		double angle = getDegrees();
-		double mag = getMagnitude();
-		System.out.println(angle);
-		double lEnc = enc.getLeftEncoder();
-		double rEnc = enc.getRightEncoder();
-		double encoderDiff = (Math.abs(rEnc - lEnc));
-		double speedDiff = (encoderDiff*0.3/60);
-		
-		if(angle == 0)
-		{
-			Motors.rightMotor.set(mag);
-			Motors.leftMotor.set(mag);
-		}
-		else if(angle == 90)
-		{
-			Motors.rightMotor.set(-mag);
-			Motors.leftMotor.set(mag);
-		}
-		else if(angle == 180)
-		{
-			Motors.rightMotor.set(-mag);
-			Motors.leftMotor.set(-mag);
-		}
-		else if(angle == 270)
-		{
-			Motors.rightMotor.set(mag);
-			Motors.leftMotor.set(-mag);
-		}
-		else if(angle == 45)
-		{
-			Motors.rightMotor.set(0);
-			Motors.leftMotor.set(mag);
-		}
-		else if(angle == 135)
-		{
-			Motors.rightMotor.set(-mag);
-			Motors.leftMotor.set(0);
-		}
-		else if(angle == 225)
-		{
-			Motors.rightMotor.set(mag);
-			Motors.leftMotor.set(0);
-		}
-		else if(angle == 315)
-		{
-			Motors.rightMotor.set(0);
-			Motors.leftMotor.set(-mag);
-		}
-		else if(angle > 0 && angle < 45)
-		{
-			Motors.rightMotor.set(-mag * Math.sin(Math.toRadians(angle)));
-			Motors.leftMotor.set(mag * Math.cos(Math.toRadians(angle)));
-		}
-		else if(angle > 45 && angle < 90)
-		{
-			Motors.rightMotor.set(-mag * Math.cos(Math.toRadians(angle)));
-			Motors.leftMotor.set(mag * Math.sin(Math.toRadians(angle)));
-		}
-		else if(angle > 90 && angle < 135)
-		{
-			Motors.rightMotor.set(-mag * Math.cos(Math.toRadians(angle-90)));
-			Motors.leftMotor.set(mag * Math.sin(Math.toRadians(angle-90)));
-		}
-		else if(angle > 135 && angle < 180)
-		{
-			Motors.rightMotor.set(-mag * Math.sin(Math.toRadians(angle-90)));
-			Motors.leftMotor.set(mag * Math.cos(Math.toRadians(angle-90)));
-		}
-		else if(angle > 180 && angle < 225)
-		{
-			Motors.rightMotor.set(mag * Math.cos(Math.toRadians(angle-180)));
-			Motors.leftMotor.set(-mag * Math.sin(Math.toRadians(angle-180)));
-		}
-		else if(angle > 225 && angle < 270)
-		{
-			Motors.rightMotor.set(mag * Math.sin(Math.toRadians(angle-180)));
-			Motors.leftMotor.set(-mag * Math.cos(Math.toRadians(angle-180)));
-		}
-		else if(angle > 270 && angle < 315)
-		{
-			Motors.rightMotor.set(mag * Math.sin(Math.toRadians(angle-270)));
-			Motors.leftMotor.set(-mag * Math.cos(Math.toRadians(angle-270)));
-		}
-		else if(angle > 315 && angle < 359)
-		{
-			Motors.rightMotor.set(mag * Math.cos(Math.toRadians(angle-270)));
-			Motors.leftMotor.set(-mag * Math.sin(Math.toRadians(angle-270)));
-		}
-		else 
-		{
-			Motors.rightMotor.set(0);
-			Motors.leftMotor.set(0);
-		}
-	}
-
-	//This is the function that is called during the test
-	//Test is an option available in the driver station and can be used to test specific pieces of code.
-	//This function runs periodically, meaning it acts like an infinite loop
-	@Override
-	public void testPeriodic() 
+	public void testPeriodic()
 	{
 		
 	}
-
-	public static double getDegrees()
-	{
-		if(Joysticks.rightJoySticky > 0  && Joysticks.rightJoyStickx > 0) //1st quadrant
-		{
-			return ( 270 +Math.toDegrees(Math.atan(Joysticks.rightJoyStickx/Joysticks.rightJoySticky)));
-		}
-		if(Joysticks.rightJoySticky > 0  && Joysticks.rightJoyStickx < 0)
-		{
-			return 180- Math.toDegrees(Math.atan(Joysticks.rightJoySticky/Joysticks.rightJoyStickx));
-		}
-		if(Joysticks.rightJoySticky < 0  && Joysticks.rightJoyStickx < 0)
-		{
-			return 180- Math.toDegrees(Math.atan(Joysticks.rightJoySticky/Joysticks.rightJoyStickx));
-		}
-		if(Joysticks.rightJoySticky < 0  && Joysticks.rightJoyStickx > 0)
-		{
-			return -Math.toDegrees(Math.atan(Joysticks.rightJoySticky/Joysticks.rightJoyStickx));
-		}
-		if(Joysticks.rightJoySticky == 0  && Joysticks.rightJoyStickx < 0)
-		{
-			return 180;
-		}
-		if(Joysticks.rightJoySticky == 0  && Joysticks.rightJoyStickx < 0)
-		{
-			return 0;
-		}
-		if(Joysticks.rightJoySticky > 0  && Joysticks.rightJoyStickx == 0)
-		{
-			return 270;
-		}
-		if(Joysticks.rightJoySticky < 0  && Joysticks.rightJoyStickx == 0)
-		{
-			return 90;
-		}
-		else
-		{
-			return 0;
-		}
-	}
-
-		//This function returns the magnitude of the vector of the right Joystick
-		public static double getMagnitude()
-		{
-			return Math.sqrt(Math.pow(Joysticks.rightJoySticky, 2) + Math.pow(Joysticks.rightJoyStickx, 2));
-		}
-		
-		public void testFunctions()
-		{
-			double magnitude, angle;
-			magnitude =  getMagnitude();
-			angle = getDegrees();
-			
-			System.out.println("Magnitude: " + magnitude + "; " + "Angle: " + angle + ";");
-		}
 }
